@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+    <py-script src="./main.py"></py-script>
+    <py-config>
+        packages = [
+        "pandas",
+        "matplotlib"
+        ]
+    </py-config>
+    
+    <title>TRIAL</title>
+</head>
+<body>
+
+    <div id="today"></div>  
+    <div id="next"></div>
+    <div id="please"></div>
+    <div id="output"></div>
+    <div id="csv"></div>
+    <div id="calories"></div>
+    <div id="fat"></div>
+    <div id="regression"></div>
+        
+    <py-script> 
+        import pandas as pd 
+        import matplotlib.pyplot as plt
+        from js import XMLHttpRequest
+        import pyodide
+        from pyodide.http import open_url
+
+        # API request
+        api_url = 'https://v1.nocodeapi.com/fintastic/fit/YwfrSRHvmFPemKCR/aggregatesDatasets?dataTypeName=calories_expended&timePeriod=30days&durationTime=daily'
+        # frist one
+        req = XMLHttpRequest.new()
+        req.open("GET", api_url, False)
+        req.send(None)
+
+        pyscript.write("please", str(req.response))
+
+        # CSV reading
+        url_content = open_url("https://raw.githubusercontent.com/elvis770/CSV/main/fintastic%20(3).csv")
+        df = pd.read_csv(url_content)
+        csv = Element('csv')
+        csv.write(df.head())
+
+        # values reading
+        df.shape
+        calories = df['Calories']
+        fat = df['Fat (g)']
+        pyscript.write("fat", fat)
+        pyscript.write("calories", calories)
+
+
+        
+        # third path
+        pyscript.write("today","we finna go")
+
+        # fourth path mathplotlib regression graph
+        
+        import matplotlib.pyplot as plt
+        fig, ax = plt.subplots()
+
+        plt.scatter(calories, fat, marker='*', color='g')
+        
+        plt.xlabel('calores')
+        plt.ylabel('fat')
+        plt.title('calories vs fat scatter plot')
+
+        display(fig, target="regression")
+
+        # fifth path 
+        
+    </py-script>
+</body>
+</html>
